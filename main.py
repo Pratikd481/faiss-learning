@@ -90,6 +90,7 @@ def search(index, query_vector, k=5):
 # -----------------------------
 def timed_search(index, query, k=5):
     start = time.time()
+    index.nprobe = 10  # For IVF index, set number of clusters to search
     D, I = index.search(query, k)
     end = time.time()
 
@@ -103,11 +104,11 @@ if __name__ == "__main__":
 
     # ⚠️ RUN ONLY FIRST TIME
     
-    generateVectors(num_vectors=500000)  # Generate 500,000 vectors of size 1,000
+    #generateVectors(num_vectors=500000)  # Generate 500,000 vectors of size 1,000
 
     # ⚠️ RUN ONLY FIRST TIME
-    vectors = load_vectors()
-    build_ivf_index(vectors)
+    # vectors = load_vectors()
+    # build_ivf_index(vectors)
 
     # NORMAL FLOW (AFTER SETUP)
     vectors = load_vectors()
@@ -191,3 +192,42 @@ if __name__ == "__main__":
 # Distances: [[  0.      147.5133  147.95512 148.03984 148.10765]]
 # Total vectors: 500000
 # Vector dimension: 1000
+
+
+#------ tested with 500k vectors IVF index : nprobe = 1 ----------------
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index loaded with 500000 vectors
+# Search time: 1.85 ms
+
+# 🔍 Query Results
+# Indices: [[     0  72050  71871 268431 332933]]
+# Distances: [[  0.      147.5133  147.95512 148.03984 148.10765]]
+# Total vectors: 500000
+# Vector dimension: 1000
+
+
+#------ tested with 500k vectors IVF index : nprobe = 5 ----------------
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index loaded with 500000 vectors
+# Search time: 8.72 ms
+
+# 🔍 Query Results
+# Indices: [[     0 253257 296062 136835  71864]]
+# Distances: [[  0.      144.14429 145.167   146.70537 146.84361]]
+# Total vectors: 500000
+# Vector dimension: 1000
+
+#------ tested with 500k vectors IVF index : nprobe = 10 ----------------
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index loaded with 500000 vectors
+# Search time: 18.29 ms
+
+# 🔍 Query Results
+# Indices: [[     0 496092 253257  74918 287411]]
+# Distances: [[  0.      141.62726 144.14429 144.35953 144.85239]]
+# Total vectors: 500000
+# Vector dimension: 1000
+
+
+
+#in case of 1 probe, accutacy(147) is lower but search time(1.85 ms) is faster. With 5 probes, we get better accuracy (144)but search time increases(8.72 ms). With 10 probes, we get even better accuracy(141) but search time(18.29 ms) increases further. This illustrates the trade-off between speed and accuracy when using IVF indexes in Faiss.
