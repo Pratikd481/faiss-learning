@@ -83,11 +83,12 @@ def timed_search(index, query, k=5):
 if __name__ == "__main__":
 
     # ⚠️ RUN ONLY FIRST TIME
-    # generate_vectors()
+    
+    generateVectors(num_vectors=10000)  # Generate 10,000 vectors of size 1,000
 
     # ⚠️ RUN ONLY FIRST TIME
-    # vectors = load_vectors()
-    # build_index(vectors)
+    vectors = load_vectors()
+    build_index(vectors)
 
     # NORMAL FLOW (AFTER SETUP)
     vectors = load_vectors()
@@ -96,10 +97,34 @@ if __name__ == "__main__":
     # Take first vector as query
     query = vectors[0].reshape(1, -1)
 
-    D, I = search(index, query)
+    D, I = timed_search(index, query)
 
     print("\n🔍 Query Results")
     print("Indices:", I)
     print("Distances:", D)
     print("Total vectors:", index.ntotal)
     print("Vector dimension:", vectors.shape[1])
+    
+    
+    
+#----------------------- tested with 10k vectors -----------------------
+# python main.py 
+# Generated 10000 vectors of size 1000 and saved to data/vectors.npy
+# [✔] Loaded vectors: (10000, 1000)
+# [✔] Index built with 10000 vectors
+# [✔] Loaded vectors: (10000, 1000)
+# [✔] Index loaded with 10000 vectors
+# [✔] Loaded vectors: (10000, 1000)
+# [✔] Index built with 10000 vectors
+# [✔] Loaded vectors: (10000, 1000)
+# [✔] Index loaded with 10000 vectors
+# [✔] Loaded vectors: (10000, 1000)
+# [✔] Index loaded with 10000 vectors
+# [✔] Index loaded with 10000 vectors
+# Search time: 2.90 ms
+
+# 🔍 Query Results
+# Indices: [[   0 3051 5245  231 4565]]
+# Distances: [[  0.      148.44266 149.53099 149.65929 150.50362]]
+# Total vectors: 10000
+# Vector dimension: 1000
