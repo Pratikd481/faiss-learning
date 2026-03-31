@@ -49,6 +49,25 @@ def build_index(vectors):
     faiss.write_index(index, INDEX_PATH)
     print(f"[✔] Index built with {index.ntotal} vectors")
     
+# -----------------------------
+# STEP 7: BUILD IVF INDEX
+# -----------------------------
+def build_ivf_index(vectors):
+    dim = vectors.shape[1]
+    nlist = 100  # number of clusters
+
+    quantizer = faiss.IndexFlatL2(dim)
+    index = faiss.IndexIVFFlat(quantizer, dim, nlist)
+
+    # IMPORTANT: training required
+    index.train(vectors)
+
+    index.add(vectors)
+
+    faiss.write_index(index, INDEX_PATH)
+
+    print("IVF index built.")
+    
 
 # -----------------------------
 # STEP 4: LOAD INDEX
@@ -88,7 +107,7 @@ if __name__ == "__main__":
 
     # ⚠️ RUN ONLY FIRST TIME
     vectors = load_vectors()
-    build_index(vectors)
+    build_ivf_index(vectors)
 
     # NORMAL FLOW (AFTER SETUP)
     vectors = load_vectors()
@@ -156,5 +175,19 @@ if __name__ == "__main__":
 # 🔍 Query Results
 # Indices: [[     0 411798  16594  18188  28242]]
 # Distances: [[  0.      144.12036 145.71042 145.82642 145.87706]]
+# Total vectors: 500000
+# Vector dimension: 1000
+
+#----------------------- tested with 500k vectors IVF index -----------------------
+# Generated 500000 vectors of size 1000 and saved to data/vectors.npy
+# [✔] Loaded vectors: (500000, 1000)
+# IVF index built.
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index loaded with 500000 vectors
+# Search time: 4.62 ms
+
+# 🔍 Query Results
+# Indices: [[     0  72050  71871 268431 332933]]
+# Distances: [[  0.      147.5133  147.95512 148.03984 148.10765]]
 # Total vectors: 500000
 # Vector dimension: 1000
