@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     # ⚠️ RUN ONLY FIRST TIME
     
-    generateVectors(num_vectors=100000)  # Generate 100,000 vectors of size 1,000
+    generateVectors(num_vectors=500000)  # Generate 500,000 vectors of size 1,000
 
     # ⚠️ RUN ONLY FIRST TIME
     vectors = load_vectors()
@@ -142,4 +142,19 @@ if __name__ == "__main__":
 # Indices: [[    0 92901 13804  2327 91453]]
 # Distances: [[  0.      138.39545 139.37825 139.8269  140.25293]]
 # Total vectors: 100000
+# Vector dimension: 1000
+
+
+#----------------------- tested with 500k vectors -----------------------
+# Generated 500000 vectors of size 1000 and saved to data/vectors.npy
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index built with 500000 vectors
+# [✔] Loaded vectors: (500000, 1000)
+# [✔] Index loaded with 500000 vectors
+# Search time: 88.84 ms
+
+# 🔍 Query Results
+# Indices: [[     0 411798  16594  18188  28242]]
+# Distances: [[  0.      144.12036 145.71042 145.82642 145.87706]]
+# Total vectors: 500000
 # Vector dimension: 1000
